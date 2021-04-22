@@ -1,0 +1,37 @@
+body {
+    background-color:#FFFFFF;
+    color:#000000;
+    font-family:serif;
+    margin-left:10%;
+    margin-right:10%;
+    margin-bottom:50px;
+}
+
+.preamble {
+    background-color:#FFFFFF;
+    color:#000000;
+    text-align:center;
+}
+
+.postamble {
+    background-color:#FFFFFF;
+    color:#000000;
+    text-align:center;
+    margin-top:50px;
+    font-size:small;
+}
+
+code {
+    background-color:#000000;
+    color:#F5DEB3;
+    font-family:Source Code Pro,monospace;
+}
+
+pre.src {
+    /* Further customization: For example, pre.src-python will override this style for Python code blocks. */
+    background-color:#000000;
+    color:#F5DEB3;
+    border-color:#3A6EA5;
+    border-width:thin thin thin 10px;
+    font-family:Source Code Pro,monospace;
+}
