@@ -552,12 +552,7 @@ The function to publish publicly needs git to be able to push without asking for
     (<span style="color: #ffffff;">progn</span>
       <span style="color: #00cd66;">;; </span><span style="color: #00cd66;">Select the correct repository.</span>
       (magit-status <span style="color: #bdb76b;">"~/blog/html"</span>)
-      <span style="color: #00cd66;">;; </span><span style="color: #00cd66;">Ensure that we can add everything without confirmation, without messing up any user settings.</span>
-      (<span style="color: #ffffff;">if</span> (member 'stage-all-changes magit-no-confirm) (magit-stage-modified)
-        (<span style="color: #ffffff;">progn</span> 
-          (add-to-list 'magit-no-confirm 'stage-all-changes)
-          (magit-stage-modified)
-          (<span style="color: #ffffff;">setq</span> magit-no-confirm (delete 'stage-all-changes magit-no-confirm))))
+      (magit-call-git <span style="color: #bdb76b;">"add"</span> <span style="color: #bdb76b;">"--all"</span>)
       <span style="color: #00cd66;">;; </span><span style="color: #00cd66;">Commit with an auto-generated message.</span>
       (<span style="color: #ffffff;">let*</span> ((commit-message (concat <span style="color: #bdb76b;">"Commit on "</span> (format-time-string <span style="color: #bdb76b;">"%F %H:%M"</span> (current-time)))))
         (magit-call-git <span style="color: #bdb76b;">"commit"</span> <span style="color: #bdb76b;">"-m"</span> commit-message))
