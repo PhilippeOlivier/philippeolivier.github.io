@@ -1,0 +1,586 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Minimalist blogging with Emacs and GitHub Pages</title>
+<meta name="generator" content="Org mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel='stylesheet' type='text/css' href='/css/style.css'/>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class='preamble'>
+          <a href='/index.html'>Blog</a> | 
+          <a href='/about.html'>About</a>
+          </div>
+</div>
+<div id="content">
+<h1 class="title">Minimalist blogging with Emacs and GitHub Pages</h1>
+<p>
+by Philippe Olivier<br />
+Created 2021-04-23<br />
+</p>
+
+<div id="outline-container-orgf027d0c" class="outline-2">
+<h2 id="orgf027d0c"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+We will discuss a simple and minimalist way of blogging, using Emacs and GitHub Pages. Here, we understand <i>minimalist</i> to be both in the context of a minimal setup and minimal dependencies. The present blog uses this exact setup. What this setup has to offer:<br />
+</p>
+<ul class="org-ul">
+<li>Create everything in org files, which will then be exported as a HTML website.<br /></li>
+<li>Customize style with CSS.<br /></li>
+<li>A single <code>M-x</code> command will publish your org files directly to GitHub Pages.<br /></li>
+<li>The option to publish locally.<br /></li>
+<li>Little complexity, little dependencies.<br /></li>
+</ul>
+</div>
+
+<div id="outline-container-org94811db" class="outline-3">
+<h3 id="org94811db"><span class="section-number-3">1.1</span> Dependencies</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+The dependencies are as follows:<br />
+</p>
+<ul class="org-ul">
+<li>Software: Emacs, git.<br /></li>
+<li>Emacs packages: magit.<br /></li>
+<li>Other: GitHub Pro account or higher.<br /></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org6d33df6" class="outline-3">
+<h3 id="org6d33df6"><span class="section-number-3">1.2</span> Process</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+The general process is very simple:<br />
+</p>
+<ul class="org-ul">
+<li>Create/modify org files (blog posts, etc).<br /></li>
+</ul>
+<p>
+then<br />
+</p>
+<ul class="org-ul">
+<li>Use a custom elisp command to generate HTML files suitable for local viewing.<br /></li>
+</ul>
+<p>
+or<br />
+</p>
+<ul class="org-ul">
+<li>Use a custom elisp command to generate <i>and</i> publish HTML files suitable for public viewing (GitHub Pages).<br /></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6423c4e" class="outline-2">
+<h2 id="org6423c4e"><span class="section-number-2">2</span> Files</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Let's take a look at how the files are organized. The following directory layout and file contents is a working example.<br />
+</p>
+</div>
+
+<div id="outline-container-org5063d68" class="outline-3">
+<h3 id="org5063d68"><span class="section-number-3">2.1</span> Directory layout</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+We will consider that the root directory for the blog on our local machine is <code>~/blog/</code>. The two main components of the layout are <code>org/</code>, which is where we will create and modify files, and <code>html/</code>, where the generated HTML files will be exported to.<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-txt">~/blog/
+|- org/
+|  |- about.org
+|  |- css/
+|  |  `- style.css
+|  |- img/
+|  |- index.org
+|  `- posts/
+|     `- first-post.org
+`- html/
+</pre>
+</div>
+
+<ul class="org-ul">
+<li><code>org/about.org</code>: In this example we have an "about me" page.<br /></li>
+<li><code>org/css/style.css</code>: The CSS stylesheet.<br /></li>
+<li><code>org/img/</code>: The image folder.<br /></li>
+<li><code>org/index.org</code>: The main page of the blog.<br /></li>
+<li><code>org/posts/</code>: A directory containing the various blog posts, with <code>first-post.org</code> as an example of a blog post.<br /></li>
+<li><code>html/</code>: The directory where the HTML files will be generated/exported.<br /></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgb2b79bf" class="outline-3">
+<h3 id="orgb2b79bf"><span class="section-number-3">2.2</span> about.org</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+The contents of <code>about.org</code> are:<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-org"><span style="color: #00cd66;">#+options: ':nil *:t -:t ::t &lt;:nil H:3 \n:t ^:t arch:headline</span>
+<span style="color: #00cd66;">#+options: author:nil broken-links:mark c:nil creator:nil</span>
+<span style="color: #00cd66;">#+options: d:(not "LOGBOOK") date:nil e:nil email:nil f:t inline:t num:t</span>
+<span style="color: #00cd66;">#+options: p:nil pri:nil prop:nil stat:nil tags:nil tasks:nil tex:t</span>
+<span style="color: #00cd66;">#+options: timestamp:nil title:t toc:nil todo:nil |:t</span>
+<span style="color: #b3b3b3;">#+title:</span> <span style="color: #afeeee; font-weight: bold;">About</span>
+<span style="color: #b3b3b3;">#+author:</span> <span style="color: #afeeee;">My Name</span>
+<span style="color: #00cd66;">#+language: en</span>
+
+I'll tell you about me folks, because I'm a very interesting person.
+Bill Gates is not as interesting as me. I'm much more interesting.
+They say I'm the most interesting person they've even seen. It's true!
+</pre>
+</div>
+
+<p>
+The top portion of the file is the export options. You can insert an export template with <code>C-c C-e # default RET</code>, then modify the options as you see fit. Documentation for these options can be found <a href="https://orgmode.org/manual/Export-Settings.html">here</a>.<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge8d18c8" class="outline-3">
+<h3 id="orge8d18c8"><span class="section-number-3">2.3</span> style.css</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+The contents of <code>style.css</code> are:<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-css"><span style="color: #98fb98;">body </span>{
+    <span style="color: #ffffff;">background-color</span>:<span style="color: #000000; background-color: #FFFFFF;">#FFFFFF</span>;
+    <span style="color: #ffffff;">color</span>:<span style="color: #ffffff; background-color: #000000;">#000000</span>;
+    <span style="color: #ffffff;">font-family</span>:serif;
+    <span style="color: #ffffff;">margin-left</span>:10%;
+    <span style="color: #ffffff;">margin-right</span>:10%;
+    <span style="color: #ffffff;">margin-bottom</span>:50px;
+}
+
+<span style="color: #98fb98;">.preamble </span>{
+    <span style="color: #ffffff;">background-color</span>:<span style="color: #000000; background-color: #FFFFFF;">#FFFFFF</span>;
+    <span style="color: #ffffff;">color</span>:<span style="color: #ffffff; background-color: #000000;">#000000</span>;
+    <span style="color: #ffffff;">text-align</span>:center;
+}
+
+<span style="color: #98fb98;">.postamble </span>{
+    <span style="color: #ffffff;">background-color</span>:<span style="color: #000000; background-color: #FFFFFF;">#FFFFFF</span>;
+    <span style="color: #ffffff;">color</span>:<span style="color: #ffffff; background-color: #000000;">#000000</span>;
+    <span style="color: #ffffff;">text-align</span>:center;
+    <span style="color: #ffffff;">margin-top</span>:50px;
+    <span style="color: #ffffff;">font-size</span>:small;
+}
+
+<span style="color: #98fb98;">code </span>{
+    <span style="color: #ffffff;">background-color</span>:<span style="color: #ffffff; background-color: #000000;">#000000</span>;
+    <span style="color: #ffffff;">color</span>:<span style="color: #000000; background-color: #F5DEB3;">#F5DEB3</span>;
+    <span style="color: #ffffff;">font-family</span>:Source Code Pro,monospace;
+}
+
+<span style="color: #98fb98;">pre.src </span>{
+    <span style="color: #ffffff;">background-color</span>:<span style="color: #ffffff; background-color: #000000;">#000000</span>;
+    <span style="color: #ffffff;">color</span>:<span style="color: #000000; background-color: #F5DEB3;">#F5DEB3</span>;
+    <span style="color: #ffffff;">border-color</span>:<span style="color: #ffffff; background-color: #3A6EA5;">#3A6EA5</span>;
+    <span style="color: #ffffff;">border-width</span>:thin thin thin 10px;
+    <span style="color: #ffffff;">font-family</span>:Source Code Pro,monospace;
+}
+</pre>
+</div>
+
+<p>
+The style for most of the page is found in <code>body</code>. The top and bottom of the page can have a different style, specified in <code>.preamble</code> and <code>.postamble</code>. Inline code <code>like this</code> is defined in <code>code</code>. The style of source blocks is defined in <code>pre.src</code>.<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org16b9724" class="outline-3">
+<h3 id="org16b9724"><span class="section-number-3">2.4</span> index.org</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+This is the main page of the blog:<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-org"><span style="color: #00cd66;">#+options: ':nil *:t -:t ::t &lt;:nil H:3 \n:t ^:t arch:headline</span>
+<span style="color: #00cd66;">#+options: author:nil broken-links:mark c:nil creator:nil</span>
+<span style="color: #00cd66;">#+options: d:(not "LOGBOOK") date:nil e:nil email:nil f:t inline:t num:t</span>
+<span style="color: #00cd66;">#+options: p:nil pri:nil prop:nil stat:nil tags:nil tasks:nil tex:t</span>
+<span style="color: #00cd66;">#+options: timestamp:nil title:t toc:nil todo:nil |:t</span>
+<span style="color: #b3b3b3;">#+title:</span> <span style="color: #afeeee; font-weight: bold;">My Blog</span>
+<span style="color: #b3b3b3;">#+author:</span> <span style="color: #afeeee;">My Name</span>
+<span style="color: #00cd66;">#+language: en</span>
+
+- <span style="color: #00ffff; text-decoration: underline;"><a href="file:posts/first-post.org">My First Blog Post!</a></span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org921a6b6" class="outline-3">
+<h3 id="org921a6b6"><span class="section-number-3">2.5</span> first-post.org</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+Example of a blog post:<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-org"><span style="color: #00cd66;">#+options: ':nil *:t -:t ::t &lt;:nil H:3 \n:t ^:t arch:headline</span>
+<span style="color: #00cd66;">#+options: author:nil broken-links:mark c:nil creator:nil</span>
+<span style="color: #00cd66;">#+options: d:(not "LOGBOOK") date:nil e:nil email:nil f:t inline:t num:t</span>
+<span style="color: #00cd66;">#+options: p:nil pri:nil prop:nil stat:nil tags:nil tasks:nil tex:t</span>
+<span style="color: #00cd66;">#+options: timestamp:nil title:t toc:nil todo:nil |:t</span>
+<span style="color: #b3b3b3;">#+title:</span> <span style="color: #afeeee; font-weight: bold;">First Post</span>
+<span style="color: #b3b3b3;">#+author:</span> <span style="color: #afeeee;">My Name</span>
+<span style="color: #00cd66;">#+language: en</span>
+
+This is my first blog post! This blog will be the best blog ever!
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org442a528" class="outline-2">
+<h2 id="org442a528"><span class="section-number-2">3</span> Elisp stuff</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+The only thing that remains is the two elisp functions to publish the blog either locally or publicly. You might want to publish locally first, to see what the final result will look like. The HTML links between files are also handled differently locally and publicly.<br />
+</p>
+
+<p>
+The preambles and postambles for local and public publishing will be slightly different (w.r.t. the links), so we define them separately:<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #00cd66;">;; </span><span style="color: #00cd66;">Head, preamble, and postamble, for local paths.</span>
+(<span style="color: #ffffff;">setq</span> me/blog-html-head-local <span style="color: #bdb76b;">"&lt;link rel='stylesheet' type='text/css' href='~/blog/html/css/style.css'/&gt;"</span>)
+(<span style="color: #ffffff;">setq</span> me/blog-html-preamble-local <span style="color: #bdb76b;">"&lt;div class='preamble'&gt;</span>
+<span style="color: #bdb76b;">            &lt;a href='~/blog/html/index.html'&gt;Blog&lt;/a&gt; | </span>
+<span style="color: #bdb76b;">            &lt;a href='~/blog/html/about.html'&gt;About&lt;/a&gt;</span>
+<span style="color: #bdb76b;">            &lt;/div&gt;"</span>)
+(<span style="color: #ffffff;">setq</span> me/blog-html-postamble-local <span style="color: #bdb76b;">"&lt;div class='postamble'&gt;</span>
+<span style="color: #bdb76b;">          This website is entirely generated by Emacs.</span>
+<span style="color: #bdb76b;">              &lt;/div&gt;"</span>)
+
+<span style="color: #00cd66;">;; </span><span style="color: #00cd66;">Head, preamble, and postamble, for public paths.</span>
+(<span style="color: #ffffff;">setq</span> me/blog-html-head-public <span style="color: #bdb76b;">"&lt;link rel='stylesheet' type='text/css' href='/css/style.css'/&gt;"</span>)
+(<span style="color: #ffffff;">setq</span> me/blog-html-preamble-public <span style="color: #bdb76b;">"&lt;div class='preamble'&gt;</span>
+<span style="color: #bdb76b;">            &lt;a href='/index.html'&gt;Blog&lt;/a&gt; | </span>
+<span style="color: #bdb76b;">            &lt;a href='/about.html'&gt;About&lt;/a&gt;</span>
+<span style="color: #bdb76b;">            &lt;/div&gt;"</span>)
+(<span style="color: #ffffff;">setq</span> me/blog-html-postamble-public <span style="color: #bdb76b;">"&lt;div class='postamble'&gt;</span>
+<span style="color: #bdb76b;">          This website is entirely generated by Emacs.</span>
+<span style="color: #bdb76b;">              &lt;/div&gt;"</span>)
+</pre>
+</div>
+
+<p>
+The variable <code>org-publish-project-alist</code> defines many options for publishing. Since the options will be different depending on if we publish locally or publicly, we wrap the variable in a function, which allows us to change some fields as needed:<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="color: #ffffff;">require</span> '<span style="color: #40e0d0;">ox-publish</span>)
+(<span style="color: #ffffff;">defun</span> <span style="color: #98fb98;">me/org-publish-project-alist-wrapper</span> (html-head html-preamble html-postamble)
+  <span style="color: #bdb76b;">"Wrapper for the variable `</span><span style="color: #40e0d0;">org-publish-project-alist</span><span style="color: #bdb76b;">', allowing dynamic modifications of some fields."</span>
+  (<span style="color: #ffffff;">setq</span> org-publish-project-alist
+        `((<span style="color: #bdb76b;">"blog-org"</span>
+           <span style="color: #b0c4de;">:base-directory</span> <span style="color: #bdb76b;">"~/blog/org/"</span>
+           <span style="color: #b0c4de;">:base-extension</span> <span style="color: #bdb76b;">"org"</span>
+           <span style="color: #b0c4de;">:publishing-directory</span> <span style="color: #bdb76b;">"~/blog/html/"</span>
+           <span style="color: #b0c4de;">:recursive</span> t
+           <span style="color: #b0c4de;">:publishing-function</span> org-html-publish-to-html
+           <span style="color: #b0c4de;">:headline-levels</span> 4
+           <span style="color: #b0c4de;">:auto-preamble</span> t
+           <span style="color: #b0c4de;">:html-validation-link</span> nil
+           <span style="color: #b0c4de;">:html-head</span> ,html-head
+           <span style="color: #b0c4de;">:html-preamble</span> ,html-preamble
+           <span style="color: #b0c4de;">:html-postamble</span> ,html-postamble
+           )
+          (<span style="color: #bdb76b;">"blog-static"</span>
+           <span style="color: #b0c4de;">:base-directory</span> <span style="color: #bdb76b;">"~/blog/org/"</span>
+           <span style="color: #b0c4de;">:base-extension</span> <span style="color: #bdb76b;">"css</span><span style="color: #bdb76b; font-weight: bold;">\\</span><span style="color: #bdb76b; font-weight: bold;">|</span><span style="color: #bdb76b;">png</span><span style="color: #bdb76b; font-weight: bold;">\\</span><span style="color: #bdb76b; font-weight: bold;">|</span><span style="color: #bdb76b;">jpg</span><span style="color: #bdb76b; font-weight: bold;">\\</span><span style="color: #bdb76b; font-weight: bold;">|</span><span style="color: #bdb76b;">gif</span><span style="color: #bdb76b; font-weight: bold;">\\</span><span style="color: #bdb76b; font-weight: bold;">|</span><span style="color: #bdb76b;">pdf"</span>
+           <span style="color: #b0c4de;">:publishing-directory</span> <span style="color: #bdb76b;">"~/blog/html/"</span>
+           <span style="color: #b0c4de;">:recursive</span> t
+           <span style="color: #b0c4de;">:publishing-function</span> org-publish-attachment
+           )
+          (<span style="color: #bdb76b;">"blog-all"</span> <span style="color: #b0c4de;">:components</span> (<span style="color: #bdb76b;">"blog-org"</span> <span style="color: #bdb76b;">"blog-static"</span>)))))
+</pre>
+</div>
+
+<p>
+Finally, the function to publish locally:<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="color: #ffffff;">defun</span> <span style="color: #98fb98;">me/blog-publish-local</span> ()
+  <span style="color: #bdb76b;">"Publish the blog so that it looks normal, locally."</span>
+  (<span style="color: #ffffff;">interactive</span>)
+  (me/org-publish-project-alist-wrapper me/blog-html-head-local
+                                        me/blog-html-preamble-local
+                                        me/blog-html-postamble-local)
+  (org-publish-project <span style="color: #bdb76b;">"blog-all"</span> t nil)
+  (message <span style="color: #bdb76b;">"Blog successfully published (local)."</span>))
+</pre>
+</div>
+
+<p>
+The function to publish publicly needs git to be able to push without asking for credentials. One option for this is <code>git-credential-store</code>. Your GitHub repository is in <code>~blog/html/</code>.<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="color: #ffffff;">require</span> '<span style="color: #40e0d0;">magit</span>)
+(<span style="color: #ffffff;">defun</span> <span style="color: #98fb98;">me/blog-publish-public</span> ()
+  <span style="color: #bdb76b;">"Publish the blog so that it looks normal, online."</span>
+  (<span style="color: #ffffff;">interactive</span>)
+  (<span style="color: #ffffff;">when</span> (y-or-n-p <span style="color: #bdb76b;">"Publish blog online? "</span>)
+    (me/org-publish-project-alist-wrapper me/blog-html-head-public
+                                          me/blog-html-preamble-public
+                                          me/blog-html-postamble-public)
+    (org-publish-project <span style="color: #bdb76b;">"blog-all"</span> t nil)
+    (<span style="color: #ffffff;">progn</span>
+      <span style="color: #00cd66;">;; </span><span style="color: #00cd66;">Select the correct repository.</span>
+      (magit-status <span style="color: #bdb76b;">"~/blog/html"</span>)
+      <span style="color: #00cd66;">;; </span><span style="color: #00cd66;">Ensure that we can add everything without confirmation, without messing up any user settings.</span>
+      (<span style="color: #ffffff;">if</span> (member 'stage-all-changes magit-no-confirm) (magit-stage-modified)
+        (<span style="color: #ffffff;">progn</span> 
+          (add-to-list 'magit-no-confirm 'stage-all-changes)
+          (magit-stage-modified)
+          (<span style="color: #ffffff;">setq</span> magit-no-confirm (delete 'stage-all-changes magit-no-confirm))))
+      <span style="color: #00cd66;">;; </span><span style="color: #00cd66;">Commit with an auto-generated message.</span>
+      (<span style="color: #ffffff;">let*</span> ((commit-message (concat <span style="color: #bdb76b;">"Commit on "</span> (format-time-string <span style="color: #bdb76b;">"%F %H:%M"</span> (current-time)))))
+        (magit-call-git <span style="color: #bdb76b;">"commit"</span> <span style="color: #bdb76b;">"-m"</span> commit-message))
+      <span style="color: #00cd66;">;; </span><span style="color: #00cd66;">Push to GitHub.</span>
+      (magit-call-git <span style="color: #bdb76b;">"push"</span>)
+      <span style="color: #00cd66;">;; </span><span style="color: #00cd66;">Kill the magit buffers created by the various operations.</span>
+      (kill-buffer <span style="color: #bdb76b;">"magit: html"</span>)
+      (kill-buffer <span style="color: #bdb76b;">"magit-process: html"</span>)
+      (delete-window))
+    (message <span style="color: #bdb76b;">"Blog successfully published (public)."</span>)))
+</pre>
+</div>
+
+<p>
+Both functions generate the HTML files directly to <code>~/blog/html/</code>, and publishing publicly further pushes the changes to the GitHub repository, and by extension to GitHub Pages.<br />
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<div class='postamble'>
+        This website is entirely generated by Emacs.
+            </div>
+</div>
+</body>
+</html>
