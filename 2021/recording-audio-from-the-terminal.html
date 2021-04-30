@@ -3,12 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-04-23 Fri 10:45 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lrm;</title>
+<title>Recording Audio From the Terminal</title>
 <meta name="generator" content="Org mode" />
-<meta name="author" content="Philippe Olivier" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center;
@@ -220,28 +218,169 @@
 <body>
 <div id="preamble" class="status">
 <div class='preamble'>
-          <a href='/index.html'>Blog</a> | 
-          <a href='/about.html'>About</a>
-          </div>
+            <a href='/index.html'>Blog</a> | 
+            <a href='/about.html'>About</a>
+            </div>
 </div>
 <div id="content">
+<h1 class="title">Recording Audio From the Terminal</h1>
 <p>
-find our input (microphone) and output (speaker) devices:
+by Philippe Olivier<br />
+Created 2021-04-30<br />
 </p>
 
 <p>
-[pholi@pholi-arch ~]$ pactl list | grep Name | grep input
-        Name: alsa<sub>input.pci</sub>-0000<sub>00</sub><sub>1f.3.analog</sub>-stereo
-[pholi@pholi-arch ~]$ pactl list | grep Name | grep output
-        Name: alsa<sub>output.pci</sub>-0000<sub>00</sub><sub>1f.3.analog</sub>-stereo
-        Name: alsa<sub>output.pci</sub>-0000<sub>00</sub><sub>1f.3.analog</sub>-stereo.monitor
-[pholi@pholi-arch ~]$ 
+This simple script records the sound input and output of your computer to a file. This can be useful for recording Zoom meetings and the like.<br />
 </p>
+
+<p>
+The required software for this is:<br />
+</p>
+<ul class="org-ul">
+<li>pulseaudio<br /></li>
+<li>vorbis<br /></li>
+</ul>
+
+<p>
+The name of the recordings are a simple timestamp, and they are saved in a directory of your choice (in this example, <code>~/recordings</code>):<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #9acd32;">FILENAME</span>=<span style="color: #fa8072;">`date +'%Y-%m-%d-%H:%M:%S'`</span>
+<span style="color: #9acd32;">TARGET</span>=<span style="color: #bdb76b;">"$HOME/recordings/"</span>
+mkdir -p $<span style="color: #9acd32;">TARGET</span>
+</pre>
+</div>
+
+<p>
+We now need to find the names of our input (microphone) and output (speaker/headphones) devices. In my case:<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">pactl list | grep Name | grep input
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-txt">Name: alsa_input.pci-0000_00_1f.3.analog-stereo
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-bash">pactl list | grep Name | grep output
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-txt">Name: alsa_output.pci-0000_00_1f.3.analog-stereo
+Name: alsa_output.pci-0000_00_1f.3.analog-stereo.monitor
+</pre>
+</div>
+
+<p>
+My input device is <code>alsa_input.pci-0000_00_1f.3.analog-stereo</code>, and my output device is <code>alsa_output.pci-0000_00_1f.3.analog-stereo</code>:<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #9acd32;">INPUT_DEVICE</span>=<span style="color: #bdb76b;">"alsa_input.pci-0000_00_1f.3.analog-stereo"</span>
+<span style="color: #9acd32;">OUTPUT_DEVICE</span>=<span style="color: #bdb76b;">"alsa_output.pci-0000_00_1f.3.analog-stereo"</span>
+</pre>
+</div>
+
+<p>
+The device/sink/loopback configuration is simple:<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-txt">Microphone ----------------\
+ (device)                   \ (loopback)
+			     \
+			      \
+			       \
+			      Sink -----------&gt; parec
+			       /
+			      /
+			     /
+     (device)               / (loopback)
+Speaker/headphones --------/
+</pre>
+</div>
+
+<p>
+We must create the modules and load them, and capture their id to unload them later:<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #9acd32;">SINK_NAME</span>=<span style="color: #bdb76b;">"mysink"</span>
+<span style="color: #9acd32;">SINK1</span>=$(<span style="color: #fa8072;">pactl</span> load-module module-null-sink <span style="color: #9acd32;">sink_name</span>=$<span style="color: #9acd32;">SINK_NAME</span>)
+<span style="color: #9acd32;">LOOPBACK1</span>=$(<span style="color: #fa8072;">pactl</span> load-module module-loopback <span style="color: #9acd32;">source</span>=$<span style="color: #9acd32;">OUTPUT_DEVICE</span>.monitor <span style="color: #9acd32;">sink</span>=$<span style="color: #9acd32;">SINK_NAME</span>)
+<span style="color: #9acd32;">LOOPBACK2</span>=$(<span style="color: #fa8072;">pactl</span> load-module module-loopback <span style="color: #9acd32;">source</span>=$<span style="color: #9acd32;">INPUT_DEVICE</span> <span style="color: #9acd32;">sink</span>=$<span style="color: #9acd32;">SINK_NAME</span>)
+</pre>
+</div>
+
+<p>
+Now the command to record:<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">parec -d $<span style="color: #9acd32;">SINK_NAME</span>.monitor | oggenc -b 192 -o $<span style="color: #9acd32;">TARGET</span>$<span style="color: #9acd32;">FILENAME</span>.ogg --raw -
+</pre>
+</div>
+
+<p>
+We use Ctrl-C to stop the recording. We must trap the signal to make sure that we unload the modules, and revert pulseaudio to its initial state:<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #ffffff;">function</span> <span style="color: #98fb98;">unload_modules</span>() {
+    pactl unload-module $<span style="color: #9acd32;">LOOPBACK2</span>
+    pactl unload-module $<span style="color: #9acd32;">LOOPBACK1</span>
+    pactl unload-module $<span style="color: #9acd32;">SINK1</span>
+    <span style="color: #b0c4de;">echo</span>
+    <span style="color: #b0c4de;">echo</span> <span style="color: #bdb76b;">"Recording saved to $TARGET$FILENAME.ogg."</span>
+    <span style="color: #ffffff;">exit</span>
+}
+
+<span style="color: #ffffff;">trap</span> unload_modules EXIT
+</pre>
+</div>
+
+<p>
+Here is the whole script:<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #9acd32;">FILENAME</span>=<span style="color: #fa8072;">`date +'%Y-%m-%d-%H:%M:%S'`</span>
+<span style="color: #9acd32;">TARGET</span>=<span style="color: #bdb76b;">"$HOME/recordings/"</span>
+mkdir -p $<span style="color: #9acd32;">TARGET</span>
+
+<span style="color: #9acd32;">INPUT_DEVICE</span>=<span style="color: #bdb76b;">"alsa_input.pci-0000_00_1f.3.analog-stereo"</span>
+<span style="color: #9acd32;">OUTPUT_DEVICE</span>=<span style="color: #bdb76b;">"alsa_output.pci-0000_00_1f.3.analog-stereo"</span>
+
+<span style="color: #9acd32;">SINK_NAME</span>=<span style="color: #bdb76b;">"mysink"</span>
+<span style="color: #9acd32;">SINK1</span>=$(<span style="color: #fa8072;">pactl</span> load-module module-null-sink <span style="color: #9acd32;">sink_name</span>=$<span style="color: #9acd32;">SINK_NAME</span>)
+<span style="color: #9acd32;">LOOPBACK1</span>=$(<span style="color: #fa8072;">pactl</span> load-module module-loopback <span style="color: #9acd32;">source</span>=$<span style="color: #9acd32;">OUTPUT_DEVICE</span>.monitor <span style="color: #9acd32;">sink</span>=$<span style="color: #9acd32;">SINK_NAME</span>)
+<span style="color: #9acd32;">LOOPBACK2</span>=$(<span style="color: #fa8072;">pactl</span> load-module module-loopback <span style="color: #9acd32;">source</span>=$<span style="color: #9acd32;">INPUT_DEVICE</span> <span style="color: #9acd32;">sink</span>=$<span style="color: #9acd32;">SINK_NAME</span>)
+
+parec -d $<span style="color: #9acd32;">SINK_NAME</span>.monitor | oggenc -b 192 -o $<span style="color: #9acd32;">TARGET</span>$<span style="color: #9acd32;">FILENAME</span>.ogg --raw -
+
+<span style="color: #ffffff;">function</span> <span style="color: #98fb98;">unload_modules</span>() {
+    pactl unload-module $<span style="color: #9acd32;">LOOPBACK2</span>
+    pactl unload-module $<span style="color: #9acd32;">LOOPBACK1</span>
+    pactl unload-module $<span style="color: #9acd32;">SINK1</span>
+    <span style="color: #b0c4de;">echo</span>
+    <span style="color: #b0c4de;">echo</span> <span style="color: #bdb76b;">"Recording saved to $TARGET$FILENAME.ogg."</span>
+    <span style="color: #ffffff;">exit</span>
+}
+
+<span style="color: #ffffff;">trap</span> unload_modules EXIT
+</pre>
+</div>
 </div>
 <div id="postamble" class="status">
 <div class='postamble'>
-        This website is entirely generated by Emacs.
-            </div>
+          This website is entirely generated by Emacs.
+              </div>
 </div>
 </body>
 </html>
