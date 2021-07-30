@@ -459,7 +459,7 @@ This script will take as its argument the path of the video file to be played. T
 <span style="color: #9acd32;">media</span> = vlc.MediaPlayer(file_path)
 media.toggle_fullscreen()
 media.play()
-time.sleep(0.2) <span style="color: #00cd66;"># </span><span style="color: #00cd66;">This ensures that the video has time to go full screen before pausing.</span>
+time.sleep(0.5) <span style="color: #00cd66;"># </span><span style="color: #00cd66;">This ensures that the video has time to go full screen before pausing.</span>
 media.pause() <span style="color: #00cd66;"># </span><span style="color: #00cd66;">The video starts paused.</span>
 
 <span style="color: #9acd32;">device_path</span> = <span style="color: #b0c4de;">next</span>(pathlib.Path(<span style="color: #bdb76b;">'/dev/input/by-path/'</span>).glob(<span style="color: #bdb76b;">'platform-ir-receiver*'</span>))
@@ -540,13 +540,14 @@ media.pause() <span style="color: #00cd66;"># </span><span style="color: #00cd66
 </div>
 
 <p>
-We wrap this Python script in a bash script (<code>play.sh</code>), to allow starting VLC on the TV from the terminal. This script also takes the file path as input, and deletes the file when it is done playing.<br />
+We wrap this Python script in a bash script (<code>play.sh</code>), to allow starting VLC on the TV from the terminal, and enabling all protocols for ir-keytable. This script also takes the file path as input, and deletes the file when it is done playing.<br />
 </p>
 
 <div class="org-src-container">
 <pre class="src src-bash"><span style="color: #00cd66;">#</span><span style="color: #00cd66;">!/bin/</span><span style="color: #ffffff;">bash</span>
 
 <span style="color: #b0c4de;">export</span> <span style="color: #9acd32;">DISPLAY</span>=:0
+sudo ir-keytable -p all
 python3 play.py $<span style="color: #9acd32;">1</span>
 <span style="color: #b0c4de;">export</span> <span style="color: #9acd32;">DISPLAY</span>=:1
 rm $<span style="color: #9acd32;">1</span>
