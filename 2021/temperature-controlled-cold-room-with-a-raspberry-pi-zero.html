@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Philippe Olivier's Blog</title>
+<title>Temperature-Controlled Cold Room With A Raspberry Pi Zero</title>
 <meta name="generator" content="Org mode" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
@@ -223,13 +223,87 @@
             </div>
 </div>
 <div id="content">
-<h1 class="title">Philippe Olivier's Blog</h1>
+<h1 class="title">Temperature-Controlled Cold Room With A Raspberry Pi Zero</h1>
+<p>
+by Philippe Olivier<br />
+Created 2021-08-XX<br />
+</p>
+
+<div id="outline-container-org7bc3b8e" class="outline-2">
+<h2 id="org7bc3b8e"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Under the porch of my house is a small concrete room. During the course of renovating my house, I transformed it into a cold room by heavily insulating it. I have a small heater that keeps the temperature at a constant 8°C during the winter. During the summer, however, the temperature can go as high as around 22°C, which is not ideal as I am also using this room to age wine.<br />
+</p>
+
+<p>
+I did not want to install an A/C unit for various reasons. Instead, I decided to build a system that would take the cold outside air (usually during the night) and circulate it through the room when the temperature delta between the inside and the outside of the room would allow it to be cooled. For this purpose, two pipes make a bridge between the inside of the room and the outside of the house, and an old bathroom fan is used to circulate the air. This fan is controlled by a Raspberry Pi Zero, which has a temperature sensor inside the room, and another one outside the house.<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org43523ff" class="outline-2">
+<h2 id="org43523ff"><span class="section-number-2">2</span> Hardware</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+This is the hardware that I ordered:<br />
+</p>
 <ul class="org-ul">
-<li><a href="2021/raspberry-pi-tv-part-2.html">Raspberry Pi TV (Part 2)</a> (2021-07-30)<br /></li>
-<li><a href="2021/raspberry-pi-tv-part-1.html">Raspberry Pi TV (Part 1)</a> (2021-05-20)<br /></li>
-<li><a href="2021/recording-audio-from-the-terminal.html">Recording Audio From the Terminal</a> (2021-04-30)<br /></li>
-<li><a href="2021/minimalist-blogging-with-emacs-and-github-pages.html">Minimalist Blogging With Emacs and GitHub Pages</a> (2021-04-23)<br /></li>
+<li>Raspberry Pi Zero W<br /></li>
+<li>Power supply<br /></li>
+<li>Case<br /></li>
+<li>64GB SD card<br /></li>
+<li>2x DHT22 temperature and humidity sensors<br /></li>
 </ul>
+</div>
+</div>
+
+<div id="outline-container-org0a6f364" class="outline-2">
+<h2 id="org0a6f364"><span class="section-number-2">3</span> Initial setup</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+First off, the initial setup of the RPi Zero is almost the same as described in a previous post (<a href="raspberry-pi-tv-part-1.html">Raspberry Pi TV (Part 1)</a>). The differences are that the stripped-down OS is chosen instead (Raspberry Pi OS Lite), and that the hostname is <code>rpi-coldroom</code>. Furthermore, since the RPi Zero does not have an ethernet port, we must manually enable a wireless connection, as described below.<br />
+</p>
+</div>
+
+<div id="outline-container-orga6c474e" class="outline-3">
+<h3 id="orga6c474e"><span class="section-number-3">3.1</span> Wireless connection</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+In the <code>/boot</code> partition, add a file <code>wpa_supplicant.conf</code> with the following information:<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-txt">ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=CA
+network={
+    ssid="MyNetwork"
+    psk="the_password"
+    key_mgmt=WPA-PSK
+}
+</pre>
+</div>
+
+<p>
+Note: The RPi Zero W does not support 5GHz.<br />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org252eeae" class="outline-2">
+<h2 id="org252eeae"><span class="section-number-2">4</span> Circuit diagram</h2>
+</div>
+
+<div id="outline-container-orgc696197" class="outline-2">
+<h2 id="orgc696197"><span class="section-number-2">5</span> The program</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+have some logging, used a built-in python thing if possible<br />
+</p>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
 <div class='postamble'>

@@ -229,9 +229,18 @@ by Philippe Olivier<br />
 Created 2021-05-20<br />
 </p>
 
-<div id="outline-container-orgf8b3281" class="outline-2">
-<h2 id="orgf8b3281"><span class="section-number-2">1</span> Hardware</h2>
+<div id="outline-container-org1475f0d" class="outline-2">
+<h2 id="org1475f0d"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
+<p>
+In this project, we set up a system that allows us to remotely send a video file to a Raspberry Pi connected to a TV. We can then control the playback with the TV remote.<br />
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf8b3281" class="outline-2">
+<h2 id="orgf8b3281"><span class="section-number-2">2</span> Hardware</h2>
+<div class="outline-text-2" id="text-2">
 <p>
 This is the hardware that I ordered:<br />
 </p>
@@ -241,31 +250,31 @@ This is the hardware that I ordered:<br />
 <li>Heatsink kit<br /></li>
 <li>Case<br /></li>
 <li>Micro-HDMI to HDMI cable<br /></li>
-<li>64GB SD card (this I already had)<br /></li>
-<li>Keyes IR remote control kit<br /></li>
+<li>64GB SD card<br /></li>
+<li>Infrared sensor (TSOP58238)<br /></li>
 </ul>
 </div>
 </div>
 
 <div id="outline-container-org0d46dc7" class="outline-2">
-<h2 id="org0d46dc7"><span class="section-number-2">2</span> Initial setup</h2>
-<div class="outline-text-2" id="text-2">
+<h2 id="org0d46dc7"><span class="section-number-2">3</span> Initial setup</h2>
+<div class="outline-text-2" id="text-3">
 </div>
 <div id="outline-container-org4901e33" class="outline-3">
-<h3 id="org4901e33"><span class="section-number-3">2.1</span> First headless connection</h3>
-<div class="outline-text-3" id="text-2-1">
+<h3 id="org4901e33"><span class="section-number-3">3.1</span> First headless connection</h3>
+<div class="outline-text-3" id="text-3-1">
 <ul class="org-ul">
-<li>Install Raspberry Pi OS with desktop<br /></li>
-<li>In the <code>/boot</code> directory, create an empty file named <code>ssh</code>, to enable SSH<br /></li>
-<li>Connect the RPi to an ethernet cable<br /></li>
-<li>Connect to the RPi via SSH: <code>ssh pi@raspberrypi.local</code> (the default password is <i>raspberry</i>)<br /></li>
+<li>Install Raspberry Pi OS with desktop.<br /></li>
+<li>In the <code>/boot</code> directory, create an empty file named <code>ssh</code>, to enable SSH.<br /></li>
+<li>Connect the RPi to an ethernet cable.<br /></li>
+<li>Connect to the RPi via SSH: <code>ssh pi@raspberrypi.local</code> (the default password is <i>raspberry</i>).<br /></li>
 </ul>
 </div>
 </div>
 
 <div id="outline-container-org26a4d65" class="outline-3">
-<h3 id="org26a4d65"><span class="section-number-3">2.2</span> Updates and auto-updates</h3>
-<div class="outline-text-3" id="text-2-2">
+<h3 id="org26a4d65"><span class="section-number-3">3.2</span> Updates and auto-updates</h3>
+<div class="outline-text-3" id="text-3-2">
 <p>
 Make sure the system is up-to-date:<br />
 </p>
@@ -289,8 +298,8 @@ Enable auto-updating of the RPi:<br />
 </div>
 
 <div id="outline-container-org3a404a8" class="outline-3">
-<h3 id="org3a404a8"><span class="section-number-3">2.3</span> Setup SSH</h3>
-<div class="outline-text-3" id="text-2-3">
+<h3 id="org3a404a8"><span class="section-number-3">3.3</span> Setup SSH</h3>
+<div class="outline-text-3" id="text-3-3">
 <p>
 First, change the hostname to <code>rpi-tv</code> and reboot:<br />
 </p>
@@ -339,10 +348,10 @@ Optional: Disable SSH access with a password.<br />
 </div>
 
 <div id="outline-container-orgee3c446" class="outline-3">
-<h3 id="orgee3c446"><span class="section-number-3">2.4</span> Initial config</h3>
-<div class="outline-text-3" id="text-2-4">
+<h3 id="orgee3c446"><span class="section-number-3">3.4</span> Initial config</h3>
+<div class="outline-text-3" id="text-3-4">
 <p>
-There are some additional settings to take care of:<br />
+You should disable screen blanking. There are some additional settings to take care of:<br />
 </p>
 
 <div class="org-src-container">
@@ -352,19 +361,20 @@ There are some additional settings to take care of:<br />
 </div>
 
 <div id="outline-container-org6ca6791" class="outline-4">
-<h4 id="org6ca6791"><span class="section-number-4">2.4.1</span> System Options</h4>
-<div class="outline-text-4" id="text-2-4-1">
+<h4 id="org6ca6791"><span class="section-number-4">3.4.1</span> System Options</h4>
+<div class="outline-text-4" id="text-3-4-1">
 <ul class="org-ul">
 <li>Setup wireless LAN<br /></li>
 <li>Change the default password<br /></li>
 <li>Enable desktop autologin<br /></li>
+<li>Ensure that audio goes through HDMI<br /></li>
 </ul>
 </div>
 </div>
 
 <div id="outline-container-orgddec70f" class="outline-4">
-<h4 id="orgddec70f"><span class="section-number-4">2.4.2</span> Interface Options</h4>
-<div class="outline-text-4" id="text-2-4-2">
+<h4 id="orgddec70f"><span class="section-number-4">3.4.2</span> Interface Options</h4>
+<div class="outline-text-4" id="text-3-4-2">
 <ul class="org-ul">
 <li>Enable VNC<br /></li>
 </ul>
@@ -372,8 +382,8 @@ There are some additional settings to take care of:<br />
 </div>
 
 <div id="outline-container-org7dda6ef" class="outline-4">
-<h4 id="org7dda6ef"><span class="section-number-4">2.4.3</span> Localisation Options</h4>
-<div class="outline-text-4" id="text-2-4-3">
+<h4 id="org7dda6ef"><span class="section-number-4">3.4.3</span> Localisation Options</h4>
+<div class="outline-text-4" id="text-3-4-3">
 <ul class="org-ul">
 <li>Setup everything depending on your region<br /></li>
 </ul>
@@ -381,8 +391,8 @@ There are some additional settings to take care of:<br />
 </div>
 
 <div id="outline-container-org68a760c" class="outline-4">
-<h4 id="org68a760c"><span class="section-number-4">2.4.4</span> Advanced Options</h4>
-<div class="outline-text-4" id="text-2-4-4">
+<h4 id="org68a760c"><span class="section-number-4">3.4.4</span> Advanced Options</h4>
+<div class="outline-text-4" id="text-3-4-4">
 <ul class="org-ul">
 <li>Expand filesystem<br /></li>
 </ul>
@@ -391,8 +401,8 @@ There are some additional settings to take care of:<br />
 </div>
 
 <div id="outline-container-org72fb4c6" class="outline-3">
-<h3 id="org72fb4c6"><span class="section-number-3">2.5</span> Using VNC</h3>
-<div class="outline-text-3" id="text-2-5">
+<h3 id="org72fb4c6"><span class="section-number-3">3.5</span> Using VNC</h3>
+<div class="outline-text-3" id="text-3-5">
 <p>
 On the RPi:<br />
 </p>
