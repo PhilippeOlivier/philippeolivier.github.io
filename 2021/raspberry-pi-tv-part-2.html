@@ -269,7 +269,7 @@ $ pip3 install evdev
 </div>
 
 <p>
-Uncomment the line "dtoverlay=gpio-ir,gpio<sub>pin</sub>=17" in <code>/boot/config.txt</code> and reboot. Then, make sure that everything works:<br />
+Uncomment the line "dtoverlay=gpio-ir,gpio_pin=17" in <code>/boot/config.txt</code> and reboot. Then, make sure that everything works:<br />
 </p>
 
 <div class="org-src-container">
@@ -445,7 +445,7 @@ We start by mapping the remote keys that interest us with their codes. In my cas
 </table>
 
 <p>
-This script will take as its argument the path of the video file to be played. The video will be launched in full screen mode and then immediately paused, so that the viewer can start playing it when they want. Fast forward/backward will move the video forward/backward by 10 seconds per key press. Pressing stop twice will delete the video file and exit the script. It is possible to customize a button to skip the introduction of videos. All of this can be achieved with the script <code>play.py</code>:<br />
+This script will take as its argument the path of the video file to be played. The video will be launched in full screen mode and then immediately paused, so that the viewer can start playing it when they want. Fast forward/backward will move the video forward/backward by 10 seconds per key press. Pressing stop twice will exit the script. It is possible to customize a button to skip the introduction of videos. All of this can be achieved with the script <code>play.py</code>:<br />
 </p>
 
 <div class="org-src-container">
@@ -548,9 +548,9 @@ We wrap this Python script in a bash script (<code>play.sh</code>), to allow sta
 
 <span style="color: #b0c4de;">export</span> <span style="color: #9acd32;">DISPLAY</span>=:0
 sudo ir-keytable -p all
-python3 play.py $<span style="color: #9acd32;">1</span>
+python3 play.py <span style="color: #bdb76b;">"$1"</span>
 <span style="color: #b0c4de;">export</span> <span style="color: #9acd32;">DISPLAY</span>=:1
-rm $<span style="color: #9acd32;">1</span>
+rm <span style="color: #bdb76b;">"$1"</span>
 </pre>
 </div>
 
@@ -559,7 +559,7 @@ The previous two scripts are used in the following way, from our local machine:<
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bash">$ ssh -i ~/.ssh/rpi-tv pi@rpi-tv.local <span style="color: #bdb76b;">"./play.sh legal-media-file.mkv &amp;"</span> &amp;
+<pre class="src src-bash">$ ssh -i ~/.ssh/rpi-tv pi@rpi-tv.local <span style="color: #bdb76b;">"./play.sh \"legal-media-file.mkv\" &amp;"</span> &amp;
 </pre>
 </div>
 </div>
